@@ -3,7 +3,7 @@
 # Drag and Drop file in Windows Forms and press button
 #
 # Autor: Ulises Cune (@Ulises2k)
-# v2.0
+# v2.1
 
 
 #######################CONSOLE################################################################
@@ -241,7 +241,7 @@ $button_Click = {
     foreach ($item in $listBox.Items) {
         if (!($i -is [System.IO.DirectoryInfo])) {
             MainConvert2MT5 -file $item
-            [System.Windows.Forms.MessageBox]::Show('Successfully migrated from 2.30 to 2.31 Community Power EA', 'Convert from MT4 to MT5', 0, 64)
+            [System.Windows.Forms.MessageBox]::Show('Successfully convert MT4 to MT5 Community Power EA', 'Convert from MT4 to MT5', 0, 64)
         }
     }
 
