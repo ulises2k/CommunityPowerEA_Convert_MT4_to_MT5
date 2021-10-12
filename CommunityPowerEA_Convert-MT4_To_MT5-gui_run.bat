@@ -1,0 +1,1 @@
+powershell -ExecutionPolicy Bypass -File "CommunityPowerEA_Convert-MT4_To_MT5-gui.ps1"
