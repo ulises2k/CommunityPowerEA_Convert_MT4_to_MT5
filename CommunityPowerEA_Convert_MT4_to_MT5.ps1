@@ -278,6 +278,9 @@ function MainConvert2MT5 ([string]$filePath) {
     #; MACD2 properties
     ConvertBoolMT4toMT5 -value "MACD2_Reverse" -file $Destino
     ConvertBoolMT4toMT5 -value "MACD2_UseClosedBars" -file $Destino
+	#; MACD3 properties
+    ConvertBoolMT4toMT5 -value "MACD3_Reverse" -file $Destino
+    ConvertBoolMT4toMT5 -value "MACD3_UseClosedBars" -file $Destino
     #; ADX properties
     ConvertBoolMT4toMT5 -value "ADX_Reverse" -file $Destino
     ConvertBoolMT4toMT5 -value "ADX_UseClosedBars" -file $Destino
