@@ -2,10 +2,9 @@
 # Drag and Drop file in Windows Forms and press button
 #
 # Autor: Ulises Cune (@Ulises2k)
-# v2.4
+# v2.8
 
 
-#######################CONSOLE################################################################
 Function Get-IniFile ($file) {
     $ini = [ordered]@{}
     switch -regex -file $file {
@@ -25,6 +24,25 @@ Function Get-IniFile ($file) {
         }
     }
     $ini
+}
+
+Function ConvertINItoProfileVersion ([string]$FilePath) {
+    $content = Get-Content $FilePath
+    switch -regex -file $FilePath {
+        "^\s*(.+?)\s*=\s*(.*)$" {
+            $name, $value = $matches[1..2]
+            # skip comments that start with semicolon:
+            if (!($name.StartsWith(";"))) {
+                if ($value.Contains('||') ) {
+                    $content = $content -replace "$($name)\s*=(.*)", "$($name)=$($value.Split('||')[0])"
+                }
+                else {
+                    $content = $content -replace "$($name)\s*=(.*)", "$($name)=$($value)"
+                }
+            }
+        }
+    }
+    $content | Set-Content $FilePath
 }
 
 function Set-OrAddIniValue {
@@ -105,41 +123,43 @@ function ConvertPriceMT4toMT5 ([string]$value, [string]$file) {
 
 function ConvertBoolMT4toMT5 ([string]$value, [string]$file) {
     $inifile = Get-IniFile($file)
+
     if ([string]$inifile[$value] -eq "0") {
         Set-OrAddIniValue -FilePath $file  -keyValueList @{
             $value = "false"
         }
     }
-    else {
+
+    if ([string]$inifile[$value] -eq "1") {
         Set-OrAddIniValue -FilePath $file  -keyValueList @{
             $value = "true"
         }
     }
 }
+
+
 function ReplaceDefaultsValueMT4toMT5 ([string]$file) {
     #Remove and Replace
     (Get-Content $file).Replace("0.00000000", "0") | Set-Content $file
     (Get-Content $file).Replace("0.01000000", "0.01") | Set-Content $file
     (Get-Content $file).Replace("0.10000000", "0.1") | Set-Content $file
-    (Get-Content $file).Replace("1.00000000", "1") | Set-Content $file
     (Get-Content $file).Replace(".00000000", "") | Set-Content $file
     (Get-Content $file).Replace("000000", "") | Set-Content $file
     (Get-Content $file).Replace("0000000", "") | Set-Content $file
 
-    #My Defaults
-    (Get-Content $file).Replace("MessagesToGrammy=1", "MessagesToGrammy=0") | Set-Content $file
-    (Get-Content $file).Replace("BE_Alert_After=3", "BE_Alert_After=0") | Set-Content $file
-    (Get-Content $file).Replace("GUI_Enabled=1", "GUI_Enabled=0") | Set-Content $file
-    (Get-Content $file).Replace("Alerts_Enabled=1", "Alerts_Enabled=0") | Set-Content $file
-    (Get-Content $file).Replace("Sounds_Enabled=1", "Sounds_Enabled=0") | Set-Content $file
-    (Get-Content $file).Replace("Show_Opened=0", "Show_Opened=1") | Set-Content $file
-    (Get-Content $file).Replace("Show_Closed=0", "Show_Closed=1") | Set-Content $file
-    (Get-Content $file).Replace("Show_Pending=0", "Show_Pending=1") | Set-Content $file
-    (Get-Content $file).Replace("MaxHistoryDeals=0", "MaxHistoryDeals=1") | Set-Content $file
-    (Get-Content $file).Replace("GUI_ShowSignals=0", "GUI_ShowSignals=1") | Set-Content $file
+    #My Defaults values
+    #Set-OrAddIniValue -FilePath $file  -keyValueList @{
+    #    MessagesToGrammy = "0"
+    #    BE_Alert_After   = "0"
+    #    GUI_Enabled      = "0"
+    #    Alerts_Enabled   = "0"
+    #    Sounds_Enabled   = "0"
+    #    Show_Opened      = "1"
+    #    Show_Closed      = "1"
+    #    Show_Pending     = "1"
+    #    GUI_ShowSignals  = "1"
+    #}
 }
-
-
 
 function MainConvert2MT5 ([string]$filePath) {
 
@@ -161,16 +181,23 @@ function MainConvert2MT5 ([string]$filePath) {
     ReplaceDefaultsValueMT4toMT5 -file "$CurrentDir\$Destino"
 
     $Destino = "$CurrentDir\$Destino"
+    ConvertINItoProfileVersion -FilePath $Destino
+
+
+    #Convert TimeFrame
     ConvertTFMT4toMT5 -value "Signal_TimeFrame" -file $Destino
     ConvertTFMT4toMT5 -value "VolPV_TF" -file $Destino
     ConvertTFMT4toMT5 -value "BigCandle_TF" -file $Destino
+    ConvertTFMT4toMT5 -value "Oscillators_TF" -file $Destino
     ConvertTFMT4toMT5 -value "Oscillator2_TF" -file $Destino
     ConvertTFMT4toMT5 -value "Oscillator3_TF" -file $Destino
     ConvertTFMT4toMT5 -value "IdentifyTrend_TF" -file $Destino
     ConvertTFMT4toMT5 -value "TDI_TF" -file $Destino
-    ConvertTFMT4toMT5 -value "FIBO_TF" -file $Destino
-    ConvertTFMT4toMT5 -value "FIB2_TF" -file $Destino
     ConvertTFMT4toMT5 -value "MACD_TF" -file $Destino
+    ConvertTFMT4toMT5 -value "MACD2_TF" -file $Destino
+    ConvertTFMT4toMT5 -value "MACD2_TF" -file $Destino
+    ConvertTFMT4toMT5 -value "ADX_TF" -file $Destino
+    ConvertTFMT4toMT5 -value "DTrend_TF" -file $Destino
     ConvertTFMT4toMT5 -value "PSar_TF" -file $Destino
     ConvertTFMT4toMT5 -value "MA_Filter_1_TF" -file $Destino
     ConvertTFMT4toMT5 -value "MA_Filter_2_TF" -file $Destino
@@ -178,39 +205,66 @@ function MainConvert2MT5 ([string]$filePath) {
     ConvertTFMT4toMT5 -value "ZZ_TF" -file $Destino
     ConvertTFMT4toMT5 -value "VolMA_TF" -file $Destino
     ConvertTFMT4toMT5 -value "VolFilter_TF" -file $Destino
+    ConvertTFMT4toMT5 -value "FIBO_TF" -file $Destino
+    ConvertTFMT4toMT5 -value "FIB2_TF" -file $Destino
 
-
+    #Convert Price
     ConvertPriceMT4toMT5 -value "Oscillators_Price" -file $Destino
     ConvertPriceMT4toMT5 -value "Oscillator2_Price" -file $Destino
     ConvertPriceMT4toMT5 -value "Oscillator3_Price" -file $Destino
     ConvertPriceMT4toMT5 -value "IdentifyTrend_AppliedPrice" -file $Destino
     ConvertPriceMT4toMT5 -value "TDI_AppliedPriceRSI" -file $Destino
     ConvertPriceMT4toMT5 -value "MACD_Price" -file $Destino
+    ConvertPriceMT4toMT5 -value "MACD2_Price" -file $Destino
+    #ConvertPriceMT4toMT5 -value "ADX_Price" -file $Destino
     ConvertPriceMT4toMT5 -value "MA_Filter_1_Price" -file $Destino
     ConvertPriceMT4toMT5 -value "MA_Filter_2_Price" -file $Destino
     ConvertPriceMT4toMT5 -value "MA_Filter_3_Price" -file $Destino
 
     #; Expert properties
     ConvertBoolMT4toMT5 -value "NewDealOnNewBar" -file $Destino
-    ConvertBoolMT4toMT5 -value "AllowHedge" -file $Destino
     ConvertBoolMT4toMT5 -value "ManageManual" -file $Destino
-    #;Pending_CancelOnOpposite
+    #; Hedge properties
+    ConvertBoolMT4toMT5 -value "AllowHedge" -file $Destino
+    #; Global Account properties
+    ConvertBoolMT4toMT5 -value "GlobalAccountStopTillTomorrow" -file $Destino
+    #; Pending entry properties
     ConvertBoolMT4toMT5 -value "Pending_CancelOnOpposite" -file $Destino
+    ConvertBoolMT4toMT5 -value "Pending_DisableForOpposite" -file $Destino
+    ConvertBoolMT4toMT5 -value "Pending_DeleteIfOpposite" -file $Destino
     #; StopLoss properties
     ConvertBoolMT4toMT5 -value "UseVirtualSL" -file $Destino
     #; TakeProfit properties
+    ConvertBoolMT4toMT5 -value "GlobalTakeProfit_OnlyLock" -file $Destino
     ConvertBoolMT4toMT5 -value "UseVirtualTP" -file $Destino
     #; Martingail properties
     ConvertBoolMT4toMT5 -value "MartingailOnTheBarEnd" -file $Destino
     ConvertBoolMT4toMT5 -value "ApplyAfterClosedLoss" -file $Destino
+
+    #; Anti-Martingale properties
+    ConvertBoolMT4toMT5 -value "AntiMartingail_AllowTP" -file $Destino
+    ConvertBoolMT4toMT5 -value "AllowBothMartinAndAntiMartin" -file $Destino
+
+    #; Partial close properties
+    ConvertBoolMT4toMT5 -value "PartialClose_AnyToAny" -file $Destino
+    ConvertBoolMT4toMT5 -value "PartialCloseHedge_MainToMain" -file $Destino
+    ConvertBoolMT4toMT5 -value "PartialCloseHedge_BothWays" -file $Destino
+
     #; Big candle properties
     ConvertBoolMT4toMT5 -value "BigCandle_CurrentBar" -file $Destino
+
     #; Oscillator #1 properties
     ConvertBoolMT4toMT5 -value "Oscillators_ContrTrend" -file $Destino
+    ConvertBoolMT4toMT5 -value "Oscillators_UseClosedBars" -file $Destino
+
     #; Oscillator #2 properties
     ConvertBoolMT4toMT5 -value "Oscillator2_ContrTrend" -file $Destino
+    ConvertBoolMT4toMT5 -value "Oscillator2_UseClosedBars" -file $Destino
+
     #; Oscillator #3 properties
     ConvertBoolMT4toMT5 -value "Oscillator3_ContrTrend" -file $Destino
+    ConvertBoolMT4toMT5 -value "Oscillator3_UseClosedBars" -file $Destino
+
     #; IdentifyTrend properties
     ConvertBoolMT4toMT5 -value "IdentifyTrend_Enable" -file $Destino
     ConvertBoolMT4toMT5 -value "IdentifyTrend_Reverse" -file $Destino
@@ -221,10 +275,23 @@ function MainConvert2MT5 ([string]$filePath) {
     #; MACD properties
     ConvertBoolMT4toMT5 -value "MACD_Reverse" -file $Destino
     ConvertBoolMT4toMT5 -value "MACD_UseClosedBars" -file $Destino
+    #; MACD2 properties
+    ConvertBoolMT4toMT5 -value "MACD2_Reverse" -file $Destino
+    ConvertBoolMT4toMT5 -value "MACD2_UseClosedBars" -file $Destino
+    #; ADX properties
+    ConvertBoolMT4toMT5 -value "ADX_Reverse" -file $Destino
+    ConvertBoolMT4toMT5 -value "ADX_UseClosedBars" -file $Destino
+    #; DTrend properties
+    ConvertBoolMT4toMT5 -value "DTrend_Reverse" -file $Destino
+    ConvertBoolMT4toMT5 -value "DTrend_UseClosedBars" -file $Destino
     #; Parabolic SAR properties
     ConvertBoolMT4toMT5 -value "PSar_Reverse" -file $Destino
-    #; ZZ properties
+    #; ZigZag properties
+    ConvertBoolMT4toMT5 -value "ZZ_UsePrevExtremums" -file $Destino
+    ConvertBoolMT4toMT5 -value "ZZ_Reverse" -file $Destino
     ConvertBoolMT4toMT5 -value "ZZ_UseClosedBars" -file $Destino
+    ConvertBoolMT4toMT5 -value "ZZ_VisualizeLevels" -file $Destino
+    ConvertBoolMT4toMT5 -value "ZZ_FillRectangle" -file $Destino
     #; FIBO #1 properties
     ConvertBoolMT4toMT5 -value "FIBO_UseClosedBars" -file $Destino
     #; FIBO #2 properties
@@ -253,8 +320,7 @@ function MainConvert2MT5 ([string]$filePath) {
     ConvertBoolMT4toMT5 -value "Alerts_Enabled" -file $Destino
     ConvertBoolMT4toMT5 -value "Sounds_Enabled" -file $Destino
 
-
-    Write-Output "Successfully Converted"
+    Write-Output "Successfully Converted MT4 To MT5"
 }
 
 
