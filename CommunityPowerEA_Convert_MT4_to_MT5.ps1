@@ -194,7 +194,7 @@ function MainConvert2MT5 ([string]$filePath) {
     ConvertTFMT4toMT5 -value "TDI_TF" -file $Destino
     ConvertTFMT4toMT5 -value "MACD_TF" -file $Destino
     ConvertTFMT4toMT5 -value "MACD2_TF" -file $Destino
-    ConvertTFMT4toMT5 -value "MACD2_TF" -file $Destino
+    ConvertTFMT4toMT5 -value "MACD3_TF" -file $Destino
     ConvertTFMT4toMT5 -value "ADX_TF" -file $Destino
     ConvertTFMT4toMT5 -value "DTrend_TF" -file $Destino
     ConvertTFMT4toMT5 -value "PSar_TF" -file $Destino
@@ -215,6 +215,7 @@ function MainConvert2MT5 ([string]$filePath) {
     ConvertPriceMT4toMT5 -value "TDI_AppliedPriceRSI" -file $Destino
     ConvertPriceMT4toMT5 -value "MACD_Price" -file $Destino
     ConvertPriceMT4toMT5 -value "MACD2_Price" -file $Destino
+	ConvertPriceMT4toMT5 -value "MACD3_Price" -file $Destino
     #ConvertPriceMT4toMT5 -value "ADX_Price" -file $Destino
     ConvertPriceMT4toMT5 -value "MA_Filter_1_Price" -file $Destino
     ConvertPriceMT4toMT5 -value "MA_Filter_2_Price" -file $Destino
