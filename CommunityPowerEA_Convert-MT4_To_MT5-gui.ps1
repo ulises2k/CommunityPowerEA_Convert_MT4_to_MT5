@@ -216,7 +216,7 @@ function MainConvert2MT5 ([string]$filePath) {
     ConvertPriceMT4toMT5 -value "TDI_AppliedPriceRSI" -file $Destino
     ConvertPriceMT4toMT5 -value "MACD_Price" -file $Destino
     ConvertPriceMT4toMT5 -value "MACD2_Price" -file $Destino
-	ConvertPriceMT4toMT5 -value "MACD3_Price" -file $Destino
+    ConvertPriceMT4toMT5 -value "MACD3_Price" -file $Destino
     #ConvertPriceMT4toMT5 -value "ADX_Price" -file $Destino
     ConvertPriceMT4toMT5 -value "MA_Filter_1_Price" -file $Destino
     ConvertPriceMT4toMT5 -value "MA_Filter_2_Price" -file $Destino
@@ -280,7 +280,7 @@ function MainConvert2MT5 ([string]$filePath) {
     #; MACD2 properties
     ConvertBoolMT4toMT5 -value "MACD2_Reverse" -file $Destino
     ConvertBoolMT4toMT5 -value "MACD2_UseClosedBars" -file $Destino
-	#; MACD3 properties
+    #; MACD3 properties
     ConvertBoolMT4toMT5 -value "MACD3_Reverse" -file $Destino
     ConvertBoolMT4toMT5 -value "MACD3_UseClosedBars" -file $Destino
     #; ADX properties
