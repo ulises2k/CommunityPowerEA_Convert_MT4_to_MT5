@@ -240,6 +240,7 @@ function MainConvert2MT5 ([string]$filePath) {
     ConvertBoolMT4toMT5 -value "UseVirtualTP" -file $Destino
     #; Martingail properties
     ConvertBoolMT4toMT5 -value "MartingailOnTheBarEnd" -file $Destino
+    ConvertBoolMT4toMT5 -value "UseOnlyOpenedTrades" -file $Destino
     ConvertBoolMT4toMT5 -value "ApplyAfterClosedLoss" -file $Destino
 
     #; Anti-Martingale properties
