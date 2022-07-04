@@ -65,7 +65,6 @@ function Set-OrAddIniValue {
     $content | Set-Content $FilePath
 }
 
-
 function ConvertTFMT4toMT5 ([string]$value , [string]$file) {
     $inifile = Get-IniFile($file)
     $rvalue = [int]$inifile[$value]
@@ -121,6 +120,7 @@ function ConvertPriceMT4toMT5 ([string]$value, [string]$file) {
         $value = [string]$rvalue
     }
 }
+
 function ConvertBoolMT4toMT5 ([string]$value, [string]$file) {
     $inifile = Get-IniFile($file)
 
@@ -145,19 +145,6 @@ function ReplaceDefaultsValueMT4toMT5 ([string]$file) {
     (Get-Content $file).Replace(".00000000", "") | Set-Content $file
     (Get-Content $file).Replace("000000", "") | Set-Content $file
     (Get-Content $file).Replace("0000000", "") | Set-Content $file
-
-    #My Defaults values
-    #Set-OrAddIniValue -FilePath $file  -keyValueList @{
-    #    MessagesToGrammy = "0"
-    #    BE_Alert_After   = "0"
-    #    GUI_Enabled      = "0"
-    #    Alerts_Enabled   = "0"
-    #    Sounds_Enabled   = "0"
-    #    Show_Opened      = "1"
-    #    Show_Closed      = "1"
-    #    Show_Pending     = "1"
-    #    GUI_ShowSignals  = "1"
-    #}
 }
 
 function MainConvert2MT5 ([string]$filePath) {
@@ -321,7 +308,6 @@ function MainConvert2MT5 ([string]$filePath) {
 
     Write-Output "Successfully Converted MT4 To MT5"
 }
-
 
 #$filePath = "test-mt4.set"
 $filePath = $args[0]
