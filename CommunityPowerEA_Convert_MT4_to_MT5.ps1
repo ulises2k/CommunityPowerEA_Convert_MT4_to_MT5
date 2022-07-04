@@ -194,7 +194,6 @@ function MainConvert2MT5 ([string]$filePath) {
     ConvertTFMT4toMT5 -value "TDI_TF" -file $Destino
     ConvertTFMT4toMT5 -value "MACD_TF" -file $Destino
     ConvertTFMT4toMT5 -value "MACD2_TF" -file $Destino
-    ConvertTFMT4toMT5 -value "MACD3_TF" -file $Destino
     ConvertTFMT4toMT5 -value "ADX_TF" -file $Destino
     ConvertTFMT4toMT5 -value "DTrend_TF" -file $Destino
     ConvertTFMT4toMT5 -value "PSar_TF" -file $Destino
@@ -215,12 +214,12 @@ function MainConvert2MT5 ([string]$filePath) {
     ConvertPriceMT4toMT5 -value "TDI_AppliedPriceRSI" -file $Destino
     ConvertPriceMT4toMT5 -value "MACD_Price" -file $Destino
     ConvertPriceMT4toMT5 -value "MACD2_Price" -file $Destino
-    ConvertPriceMT4toMT5 -value "MACD3_Price" -file $Destino
-    #ConvertPriceMT4toMT5 -value "ADX_Price" -file $Destino
+    ConvertPriceMT4toMT5 -value "ADX_Price" -file $Destino
     ConvertPriceMT4toMT5 -value "MA_Filter_1_Price" -file $Destino
     ConvertPriceMT4toMT5 -value "MA_Filter_2_Price" -file $Destino
     ConvertPriceMT4toMT5 -value "MA_Filter_3_Price" -file $Destino
 
+    #Convert Bool(true/false)
     #; Expert properties
     ConvertBoolMT4toMT5 -value "NewDealOnNewBar" -file $Destino
     ConvertBoolMT4toMT5 -value "ManageManual" -file $Destino
@@ -228,6 +227,8 @@ function MainConvert2MT5 ([string]$filePath) {
     ConvertBoolMT4toMT5 -value "AllowHedge" -file $Destino
     #; Global Account properties
     ConvertBoolMT4toMT5 -value "GlobalAccountStopTillTomorrow" -file $Destino
+    #; Common limits properties
+    ConvertBoolMT4toMT5 -value "CL_CloseOnProfitAndDD" -file $Destino
     #; Pending entry properties
     ConvertBoolMT4toMT5 -value "Pending_CancelOnOpposite" -file $Destino
     ConvertBoolMT4toMT5 -value "Pending_DisableForOpposite" -file $Destino
@@ -241,31 +242,25 @@ function MainConvert2MT5 ([string]$filePath) {
     ConvertBoolMT4toMT5 -value "MartingailOnTheBarEnd" -file $Destino
     ConvertBoolMT4toMT5 -value "UseOnlyOpenedTrades" -file $Destino
     ConvertBoolMT4toMT5 -value "ApplyAfterClosedLoss" -file $Destino
-
     #; Anti-Martingale properties
     ConvertBoolMT4toMT5 -value "AntiMartingail_AllowTP" -file $Destino
     ConvertBoolMT4toMT5 -value "AllowBothMartinAndAntiMartin" -file $Destino
-
     #; Partial close properties
     ConvertBoolMT4toMT5 -value "PartialClose_AnyToAny" -file $Destino
+    ConvertBoolMT4toMT5 -value "PartialClose_CloseProfitItself" -file $Destino
     ConvertBoolMT4toMT5 -value "PartialCloseHedge_MainToMain" -file $Destino
     ConvertBoolMT4toMT5 -value "PartialCloseHedge_BothWays" -file $Destino
-
     #; Big candle properties
     ConvertBoolMT4toMT5 -value "BigCandle_CurrentBar" -file $Destino
-
     #; Oscillator #1 properties
     ConvertBoolMT4toMT5 -value "Oscillators_ContrTrend" -file $Destino
     ConvertBoolMT4toMT5 -value "Oscillators_UseClosedBars" -file $Destino
-
     #; Oscillator #2 properties
     ConvertBoolMT4toMT5 -value "Oscillator2_ContrTrend" -file $Destino
     ConvertBoolMT4toMT5 -value "Oscillator2_UseClosedBars" -file $Destino
-
     #; Oscillator #3 properties
     ConvertBoolMT4toMT5 -value "Oscillator3_ContrTrend" -file $Destino
     ConvertBoolMT4toMT5 -value "Oscillator3_UseClosedBars" -file $Destino
-
     #; IdentifyTrend properties
     ConvertBoolMT4toMT5 -value "IdentifyTrend_Enable" -file $Destino
     ConvertBoolMT4toMT5 -value "IdentifyTrend_Reverse" -file $Destino
